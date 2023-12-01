@@ -1,7 +1,7 @@
 package day01
 
 import (
-	"advent2022-go/helpers"
+	"advent2023-go/helpers"
 	"bufio"
 	"fmt"
 	"io"

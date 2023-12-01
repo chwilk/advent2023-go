@@ -1,14 +1,8 @@
 package main
 
 import (
-	"advent2022-go/day01"
-	"advent2022-go/day02"
-	"advent2022-go/day03"
-	"advent2022-go/day04"
-	"advent2022-go/day05"
-	"advent2022-go/day06"
-	"advent2022-go/day13"
-	"advent2022-go/helpers"
+	"advent2023-go/day01"
+	"advent2023-go/helpers"
 	"bytes"
 	"fmt"
 	"io"
