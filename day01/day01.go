@@ -35,7 +35,7 @@ func PartB(lines io.Reader) (answer int) {
 	scanner := bufio.NewScanner(lines)
 
 	for scanner.Scan() {
-		answer += getNumber(parseDigits(scanner.Bytes()))
+		answer += getParsedDigits(scanner.Bytes())
 	}
 	return
 }
@@ -53,49 +53,58 @@ func getNumber(line []byte) (answer int) {
 	return
 }
 
-func parseDigits(line []byte) (answer []byte) {
-	answer = line
+func getParsedDigits(line []byte) (answer int) {
+	first := regexp.MustCompile(`\d|one|two|three|four|five|six|seven|eight|nine`).FindIndex(line)
+	rev := reverse(line)
+	tmp := regexp.MustCompile(`\d|eno|owt|eerht|ruof|evif|xis|neves|thgie|enin`).FindIndex(rev)
+	answer = 10 * parseDigit(string(line[first[0]:first[1]]))
 
-	for {
-		var replace string
-		index := regexp.MustCompile(`one|two|three|four|five|six|seven|eight|nine`).FindIndex(answer)
-		if index == nil {
-			break
+	// unreverse indices for last
+	var last [2]int
+	length := len(line)
+	last[0] = length - tmp[1]
+	last[1] = length - tmp[0]
+	answer += parseDigit(string(line[last[0]:last[1]]))
+
+	return
+}
+
+func parseDigit(text string) (answer int) {
+	switch text {
+	case "one":
+		answer = 1
+	case "two":
+		answer = 2
+	case "three":
+		answer = 3
+	case "four":
+		answer = 4
+	case "five":
+		answer = 5
+	case "six":
+		answer = 6
+	case "seven":
+		answer = 7
+	case "eight":
+		answer = 8
+	case "nine":
+		answer = 9
+	default:
+		var err error
+		answer, err = strconv.Atoi(text)
+		if err != nil {
+			panic("Failed to parse a number")
 		}
-		switch string(answer[index[0]:index[1]]) {
-		case "one":
-			replace = "1"
-		case "two":
-			replace = "2"
-		case "three":
-			replace = "3"
-		case "four":
-			replace = "4"
-		case "five":
-			replace = "5"
-		case "six":
-			replace = "6"
-		case "seven":
-			replace = "7"
-		case "eight":
-			replace = "8"
-		case "nine":
-			replace = "9"
-		default:
-			replace = "X"
-		}
-		var head, tail string
-		if index[0] == 0 {
-			head = ""
-		} else {
-			head = string(answer[0:index[0]])
-		}
-		if index[1] == len(answer) {
-			tail = ""
-		} else {
-			tail = string(answer[index[1]:])
-		}
-		answer = []byte(fmt.Sprintf("%s%s%s", head, replace, tail))
 	}
 	return
+}
+
+// reverse a byte array
+func reverse(a []byte) (b []byte) {
+	b = make([]byte, len(a))
+	copy(b, a)
+	for i, j := 0, len(b)-1; i < j; i, j = i+1, j-1 {
+		b[i], b[j] = b[j], b[i]
+	}
+	return b
 }

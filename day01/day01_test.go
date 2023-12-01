@@ -38,9 +38,28 @@ func TestGetNumber(t *testing.T) {
 	helpers.Check(t, expect, got)
 }
 
-func TestParseDigits(t *testing.T) {
-	test := []byte(`twoneighthreeseveninefourfivesix`)
-	expect := []byte(`2n8hree7ine456`)
-	got := parseDigits(test)
-	helpers.CheckString(t, string(expect), string(got))
+func TestGetParsedDigits(t *testing.T) {
+	t.Run("Test parsed digits function", func(t *testing.T) {
+		test := []byte(`twoneighthreeseveninefour4fiveight`)
+		expect := 28
+		got := getParsedDigits(test)
+		helpers.Check(t, expect, got)
+	})
+}
+func TestDigitParserHelpers(t *testing.T) {
+	t.Run("Test written digit parser", func(t *testing.T) {
+		expect := 7
+		got := parseDigit("seven")
+		helpers.Check(t, expect, got)
+	})
+	t.Run("Test numeric digit parser", func(t *testing.T) {
+		expect := 7
+		got := parseDigit("7")
+		helpers.Check(t, expect, got)
+	})
+	t.Run("Test string reverser", func(t *testing.T) {
+		expect := "gnilleps"
+		got := string(reverse([]byte("spelling")))
+		helpers.CheckString(t, expect, got)
+	})
 }
