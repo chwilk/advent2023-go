@@ -42,20 +42,21 @@ func usage() {
 func getDay(day int) Days {
 	switch day {
 	case 2:
-		return day02.Day02{}
+		//return day02.Day02{}
 	case 3:
-		return day03.Day03{}
+		//return day03.Day03{}
 	case 4:
-		return day04.Day04{}
+		//return day04.Day04{}
 	case 5:
-		return day05.Day05{}
+		//return day05.Day05{}
 	case 6:
-		return day06.Day06{}
+		//return day06.Day06{}
 	case 13:
-		return day13.Day13{}
+		//return day13.Day13{}
 	default:
-		return day01.Day01{}
+		
 	}
+	return day01.Day01{}
 }
 
 func runDay(d Days, day, part int) {
