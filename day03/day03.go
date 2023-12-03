@@ -23,10 +23,10 @@ func (f Day03) Run(input io.Reader, part int) (result string) {
 	return
 }
 
-func PartA(lines io.Reader) (answer int) {
+func PartA(lines io.Reader) (answer int64) {
 	schematic := readPuzzle(lines)
 
-	re := regexp.MustCompile(`(\d+)`)
+	re := regexp.MustCompile(`\d+`)
 	for i, row := range schematic {
 		matches := re.FindAllIndex(row, -1)
 		for _, m := range matches {
@@ -35,7 +35,7 @@ func PartA(lines io.Reader) (answer int) {
 				panic(err)
 			}
 			if checkAdjacent(schematic, i, m) {
-				answer += tmp
+				answer +=  int64(tmp)
 			}
 		}
 	}
@@ -54,18 +54,20 @@ func readPuzzle(lines io.Reader) (puzzle [][]byte) {
 	scanner := bufio.NewScanner(lines)
 	for scanner.Scan() {
 		line := scanner.Bytes()
+		row := make([]byte, len(line), 140)
 		for i, v := range line {
 			switch {
 			case v == '.':
-				line[i] = 0
-			case v > 47 && v < 58:
 				// noop
+			case v > 47 && v < 58:
+				row[i] = line[i]
 			default:
-				line[i] = 'S'
+				row[i] = 'S'
 			}
 		}
-		puzzle = append(puzzle, line)
+		puzzle = append(puzzle, row)
 	}
+
 	return
 }
 

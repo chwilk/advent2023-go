@@ -2,6 +2,9 @@ package day03
 
 import (
 	"advent2023-go/helpers"
+	"bytes"
+	"fmt"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -19,16 +22,71 @@ const example string = `467..114..
 .664.598..
 `
 
+const helpfulRedditor string = `12.......*..
++.........34
+.......-12..
+..78........
+../....60...
+78.........9
+.5.....23..$
+8...90:12...
+............
+2.2......12.
+.*.........*
+1.1..503+.56`
+
+const beyondEdges string = `..99..
+*....*
+******
+*....*
+*.99.*
+*....*
+******
+...*..
+99.*.7
+...*..
+******
+*....*
+*.99.*`
+
+const edgeA string = `$..
+.11
+.11
+$..
+..$
+11.
+11.
+..$`
+
 func TestRun(t *testing.T) {
 	t.Run("Run function part A", func(t *testing.T) {
 		expect := "4361"
 		got := Day03{}.Run(strings.NewReader(example), helpers.PartA)
 		helpers.CheckString(t, expect, got)
 	})
+	t.Run("Run function part A on Redditor's input", func(t *testing.T) {
+		expect := "925"
+		got := Day03{}.Run(strings.NewReader(helpfulRedditor), helpers.PartA)
+		helpers.CheckString(t, expect, got)
+	})
+	t.Run("Run function part A on edgeA input", func(t *testing.T) {
+		expect := "44"
+		got := Day03{}.Run(strings.NewReader(edgeA), helpers.PartA)
+		helpers.CheckString(t, expect, got)
+	})
 	t.Run("Run function part B", func(t *testing.T) {
 		expect := "0"
 		got := Day03{}.Run(strings.NewReader(example), helpers.PartB)
 		helpers.CheckString(t, expect, got)
+	})
+	t.Run("Run function part A on AoC input", func(t *testing.T) {
+		filename := fmt.Sprintf("../problems/input%02d.dat", 3)
+		data, err := os.ReadFile(filename)
+		if err != nil {
+			t.Error(err)
+		}
+		got := Day03{}.Run(bytes.NewReader(data), helpers.PartA)
+		fmt.Printf("Part A returns %s", got)
 	})
 }
 
@@ -92,7 +150,7 @@ func TestCheckAdjacent(t *testing.T) {
 	})
 	t.Run("Edge case, top right", func(t *testing.T) {
 		data := [][]byte{
-			{0,0,'4', '4', '4'},
+			{0, 0, '4', '4', '4'},
 			{0, 'S', 0, 0, 0},
 			{0, 0, 0, 0, 0}}
 		got := checkAdjacent(data, 0, []int{2, 5})
