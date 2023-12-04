@@ -1,0 +1,22 @@
+package day04
+
+import (
+	"advent2023-go/helpers"
+	"strings"
+	"testing"
+)
+
+const example string = ``
+
+func TestRun(t *testing.T) {
+	t.Run("Run function part A", func(t *testing.T) {
+		expect := "0"
+		got := Day04{}.Run(strings.NewReader(example), helpers.PartA)
+		helpers.CheckString(t, expect, got)
+	})
+	t.Run("Run function part B", func(t *testing.T) {
+		expect := "0"
+		got := Day04{}.Run(strings.NewReader(example), helpers.PartB)
+		helpers.CheckString(t, expect, got)
+	})
+}
