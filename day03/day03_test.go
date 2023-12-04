@@ -75,7 +75,7 @@ func TestRun(t *testing.T) {
 		helpers.CheckString(t, expect, got)
 	})
 	t.Run("Run function part B", func(t *testing.T) {
-		expect := "0"
+		expect := "467835"
 		got := Day03{}.Run(strings.NewReader(example), helpers.PartB)
 		helpers.CheckString(t, expect, got)
 	})
@@ -93,14 +93,14 @@ func TestRun(t *testing.T) {
 func TestReadPuzzle(t *testing.T) {
 	expect := [][]byte{
 		{'4', '6', '7', 0, 0, '1', '1', '4', 0, 0},
-		{0, 0, 0, 'S', 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 'G', 0, 0, 0, 0, 0, 0},
 		{0, 0, '3', '5', 0, 0, '6', '3', '3', 0},
 		{0, 0, 0, 0, 0, 0, 'S', 0, 0, 0},
-		{'6', '1', '7', 'S', 0, 0, 0, 0, 0, 0},
+		{'6', '1', '7', 'G', 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 'S', 0, '5', '8', 0},
 		{0, 0, '5', '9', '2', 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, '7', '5', '5', 0},
-		{0, 0, 0, 'S', 0, 'S', 0, 0, 0, 0},
+		{0, 0, 0, 'S', 0, 'G', 0, 0, 0, 0},
 		{0, '6', '6', '4', 0, '5', '9', '8', 0, 0}}
 	got := readPuzzle(strings.NewReader(example))
 	if !reflect.DeepEqual(expect, got) {

@@ -43,10 +43,16 @@ func PartA(lines io.Reader) (answer int64) {
 }
 
 func PartB(lines io.Reader) (answer int) {
-	scanner := bufio.NewScanner(lines)
+	schematic := readPuzzle(lines)
 
-	for scanner.Scan() {
+	re := regexp.MustCompile(`G`)
+	for i, row := range schematic {
+		gears := re.FindAllIndex(row, -1)
+		for _, m := range gears {
+			answer += gearNumbers(schematic, i, m[0]) 
+		}
 	}
+
 	return
 }
 
@@ -61,6 +67,8 @@ func readPuzzle(lines io.Reader) (puzzle [][]byte) {
 				// noop
 			case v > 47 && v < 58:
 				row[i] = line[i]
+			case v == '*':
+				row[i] = 'G'
 			default:
 				row[i] = 'S'
 			}
@@ -98,10 +106,60 @@ func checkAdjacent(data [][]byte, row int, cols []int) bool {
 	}
 
 	for i := checkRange[0][1]; i <= checkRange[1][1]; i++ {
-		if strings.Contains(string(data[i][checkRange[0][0]:checkRange[1][0]+1]), "S") {
+		if strings.ContainsAny(string(data[i][checkRange[0][0]:checkRange[1][0]+1]), "SG") {
 			return true
 		}
 	}
 
 	return false
+}
+
+func gearNumbers(data [][]byte, row, col int) (answer int) {
+	var count int
+	var partNos []int
+	lastRow := len(data) - 1
+
+	re := regexp.MustCompile(`\d+`)
+	if row > 0 { // check row above
+		matches := re.FindAllIndex(data[row-1], -1)
+		for _, m := range matches {
+			if m[0] <= col + 1 && m[1]  >= col {
+				num, err := strconv.Atoi(string(data[row-1][m[0]:m[1]]))
+				if err != nil {
+					panic(err)
+				}
+				count ++
+				partNos = append(partNos,num)
+			}
+		}
+	}
+	if row < lastRow { // check row below
+		matches := re.FindAllIndex(data[row+1], -1)
+		for _, m := range matches {
+			if m[0] <= col + 1 && m[1] >= col {
+				num, err := strconv.Atoi(string(data[row+1][m[0]:m[1]]))
+				if err != nil {
+					panic(err)
+				}
+				count ++
+				partNos = append(partNos,num)
+			}
+		}
+	}
+	matches := re.FindAllIndex(data[row], -1)
+	for _, m := range matches {
+		if m[0] == col + 1 || m[1] == col {
+			num, err := strconv.Atoi(string(data[row][m[0]:m[1]]))
+			if err != nil {
+				panic(err)
+			}
+			count ++
+			partNos = append(partNos,num)
+		}
+	}
+
+	if count == 2 {
+		answer = partNos[0] * partNos[1]
+	}
+	return
 }
