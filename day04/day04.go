@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -16,7 +17,7 @@ type Card struct {
 	id      int
 	have    []int
 	winning []int
-	points  int
+	matches  int
 }
 
 func (f Day04) Run(input io.Reader, part int) (result string) {
@@ -33,15 +34,27 @@ func PartA(lines io.Reader) (answer int) {
 	scanner := bufio.NewScanner(lines)
 	for scanner.Scan() {
 		card:= NewCard(scanner.Text())
-		answer += card.points
+		if card.matches > 0 {
+			answer += int(math.Pow(2, float64(card.matches - 1)))
+		}
 	}
 	return
 }
 
 func PartB(lines io.Reader) (answer int) {
 	scanner := bufio.NewScanner(lines)
-
+	var pile []Card
 	for scanner.Scan() {
+		card:= NewCard(scanner.Text())
+		pile = append(pile, card)
+	}
+	copies := make([]int, len(pile)+1)
+	for _, card := range pile {
+		copies[card.id] += 1 // count original card we're iterating through
+		for j := 1; j <= card.matches; j++ {
+			copies[card.id+j] += copies[card.id] 
+		}
+		answer += copies[card.id]
 	}
 	return
 }
@@ -77,18 +90,14 @@ func NewCard(row string) (card Card) {
 			}
 		}
 	}
-	card.points = scoreCard(card)
+	card.matches = scoreCard(card)
 	return card
 }
 
 func scoreCard(card Card) (score int) {
 	for _, num := range card.have {
 		if  contains(card.winning, num) {
-			if score > 0 {
-				score *= 2
-			} else {
-				score = 1
-			}
+			score ++
 		}
 	}
 	return
@@ -101,4 +110,11 @@ func contains(a []int, val int) bool {
 		}
 	}
 	return false
+}
+
+func sum (a []int) (answer int) {
+	for _,v := range a {
+		answer += v
+	}
+	return
 }

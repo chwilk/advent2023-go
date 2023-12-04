@@ -21,31 +21,38 @@ func TestRun(t *testing.T) {
 		helpers.CheckString(t, expect, got)
 	})
 	t.Run("Run function part B", func(t *testing.T) {
-		expect := "0"
+		expect := "30"
 		got := Day04{}.Run(strings.NewReader(example), helpers.PartB)
 		helpers.CheckString(t, expect, got)
 	})
 }
 
 func TestNewCard(t *testing.T) {
-	expect := Card{id: 1, have: []int{1}, winning: []int{1,20}, points: 1}
+	expect := Card{id: 1, have: []int{1}, winning: []int{1, 20}, matches: 1}
 	got := NewCard("Card  1:  1 |  1 20")
-	if ! reflect.DeepEqual(expect, got) {
-		t.Errorf("Expected %v, got %v", expect, got) 
+	if !reflect.DeepEqual(expect, got) {
+		t.Errorf("Expected %v, got %v", expect, got)
 	}
 }
 
 func TestScoreCard(t *testing.T) {
-	data := Card{id: 1, have: []int{1}, winning: []int{1,20}}
+	data := Card{id: 1, have: []int{1, 2}, winning: []int{1, 2, 20}}
 	got := scoreCard(data)
-	expect := 1
+	expect := 2
 	helpers.Check(t, expect, got)
 }
 
 func TestContains(t *testing.T) {
 	a := []int{1, 2, 3, 4}
 	v := 3
-	if ! contains(a,v) {
+	if !contains(a, v) {
 		t.Errorf("contains function could not find %v in %v", v, a)
 	}
+}
+
+func TestSum(t *testing.T) {
+	a := []int{1, 2, 3, 4}
+	expect:= 10
+	got := sum(a)
+	helpers.Check(t, expect, got)
 }
